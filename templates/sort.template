@@ -1,0 +1,42 @@
+Name: `sort`,
+Description: `Generates an implementation of sort.Interface.<br/>
+<br/>
+Parameters:<br/>
+sort.Type - the type of the slice<br/>
+<br/>
+Optional Parameters<br/>
+sort.SliceTypeName - the name slice type which will implement sort.Interface [default sort.Type+"Slice"]<br/>
+sort.SliceDefined - if left empty, sort.SliceTypeName will be used to define a new type<br/>
+sort.Compare - a 2 string parameter format statement that controls the Less function. [default "%s < %s"]<br/>`,
+Inputs: { `sort.Type`, `sort.SliceTypeName`, `sort.SliceDefined`, `sort.Compare` },
+InputDependencies: { `header` },
+Depedencies: { `header` },
+Data: `{{define "sort"}}{{/*
+
+Get and check parameters
+*/}}{{$type := index . "sort.Type" }}{{/*
+*/}}{{if not $type}}{{/*
+	*/}}{{errorf "sort.Type parameter not found: %v" .}}{{/*
+*/}}{{end}}{{/*
+*/}}{{$type := index $type 0 }}{{/*
+
+*/}}{{$defaultSliceType := printf "%sSlice" $type }}{{/*
+*/}}{{$slicetypename := index . "sort.SliceTypeName" | rappend $defaultSliceType | rindex 0 }}{{/*
+
+*/}}{{$defineslice := index . "sort.SliceDefined" | not }}{{/*
+
+*/}}{{$defaultCompare := "%s < %s" }}{{/*
+*/}}{{$compare := index . "sort.Compare" | rappend $defaultCompare | rindex 0 }}{{/*
+
+*/}}{{$headerInputs := regexpfilter . "header\\..+" }}{{/*
+
+Execution begins here.
+*/}}{{template "header" $headerInputs}}{{if $defineslice}}// {{$slicetypename}} attaches the methods of Interface to []{{$type}}, sorting in increasing order.
+type {{$slicetypename}} []{{$type}}
+
+{{end}}//The Sort Functions
+func (p {{$slicetypename}}) Len() int           { return len(p) }
+func (p {{$slicetypename}}) Less(i, j int) bool { return {{printf $compare "p[i]" "p[j]"}} }
+func (p {{$slicetypename}}) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+
+{{end}}`, 

@@ -1,0 +1,30 @@
+Name: `heap`,
+Description: ``,
+Inputs: { `heap.Type`, `heap.SliceTypeName`, `heap.SortDefined`, `sort.SliceDefined`, `sort.Compare` },
+Depedencies: { `sort`, `header` },
+InputDependencies: { `header` },
+Data: `{{define "heap"}}{{/*
+
+Get and check parameters
+*/}}{{$type := index . "heap.Type" }}{{/*
+*/}}{{if not $type}}{{/*
+	*/}}{{errorf "heap.Type parameter not found: %v" .}}{{/*
+*/}}{{end}}{{/*
+*/}}{{$type := index $type 0 }}{{/*
+
+*/}}{{$defaultSliceType := printf "%sSlice" $type }}{{/*
+*/}}{{$slicetypename := index . "heap.SliceTypeName" | rappend $defaultSliceType | rindex 0 }}{{/*
+
+*/}}{{$defineSort := index . "heap.SortDefined" | not }}{{/*
+
+*/}}{{$sortType := index . "heap.Type" }}{{/*
+*/}}{{$sortSliceTypename := index . "heap.SliceTypeName" }}{{/*
+*/}}{{$sortInputs := filter . "sort.SliceDefined" "sort.Compare" | rset "sort.Type" $sortType | rset "sort.SliceTypeName" $sortSliceTypename }}{{/*
+*/}}{{$headerInputs := regexpfilter . "header\\..+" }}{{/*
+
+Execution begins here.
+*/}}{{template "header" $headerInputs}}{{if $defineSort }}{{template "sort" $sortInputs}}{{end}}//The Heap Functions
+func (p {{$slicetypename}}) Push(x interface{}) { p = append(p, x.({{$type}})) }
+func (p {{$slicetypename}}) Pop() interface{}   { p = p[:p.Len()-1] }
+
+{{end}}`,
