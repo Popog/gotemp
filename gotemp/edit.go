@@ -310,7 +310,7 @@ func postEditHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	if err := memcache.Delete(c, template.Name); err != memcache.ErrCacheMiss {
 		log.Println(err)
 	}
