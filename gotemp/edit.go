@@ -51,7 +51,7 @@ func init() {
 	{
 		buf := bytes.NewBuffer(nil)
 		const form_body = `<form action="/edit/modify" method="post">
-			<fieldset id="Template Select">
+			<fieldset>
 				<legend>Select A Template</legend>
 				<select name="Name" class="field">
 					<optgroup label="Templates">{{range .}}
@@ -181,39 +181,39 @@ func init() {
 	{
 		buf := bytes.NewBuffer(nil)
 		const form_body = `<form action="/edit/post" method="post">
-				<fieldset id="NameFields">
+				<fieldset>
 					<legend>Name</legend>
 					<input type="text" class="field" name="Name" cols="80" value="{{html .Name}}"/>
 				</fieldset>
-				<fieldset id="DescriptionFields">
+				<fieldset>
 					<legend>Description</legend>
 					<textarea name="Description" rows="20" cols="80">{{html .Description}}</textarea>
 				</fieldset>
-				<fieldset id="InputFields">
+				<fieldset>
 					<legend>Inputs</legend>
-					<input type="button" value="Add an Input" class="add" id="add" onclick="AddInputFields($(this))" />{{range $i, $e := .Inputs}}
-					<div class="fieldwrapper" id="field{{$i}}">
-						<input type="text" class="field" name="Inputs" cols="80" value="{{html $e}}"/>
+					<input type="button" value="Add an Input" class="add" onclick="AddInputFields($(this))" />{{range .Inputs}}
+					<div class="fieldwrapper">
+						<input type="text" class="field" name="Inputs" cols="80" value="{{html .}}"/>
 						<input type="button" class="remove" value="-" onclick="$(this).parent().remove()"/>
 					</div>{{end}}
 				</fieldset>
-				<fieldset id="InputDependencyFields">
+				<fieldset>
 					<legend>Input Dependencies</legend>
-					<input type="button" value="Add a Input Dependency" class="add" id="add" onclick="AddInputDependencyFields($(this))" />{{range $i, $e := .InputDependencies}}
-					<div class="fieldwrapper" id="field{{$i}}">
-						<input type="text" class="field" name="InputDependencies" cols="80" value="{{html $e}}"/>
+					<input type="button" value="Add a Input Dependency" class="add" onclick="AddInputDependencyFields($(this))" />{{range .InputDependencies}}
+					<div class="fieldwrapper">
+						<input type="text" class="field" name="InputDependencies" cols="80" value="{{html .}}"/>
 						<input type="button" class="remove" value="-" onclick="$(this).parent().remove()"/>
 					</div>{{end}}
 				</fieldset>
-				<fieldset id="DependencyFields">
+				<fieldset>
 					<legend>Dependencies</legend>
-					<input type="button" value="Add a Dependency" class="add" id="add" onclick="AddDependencyFields($(this))" />{{range $i, $e := .Dependencies}}
-					<div class="fieldwrapper" id="field{{$i}}">
-						<input type="text" class="field" name="Dependencies" cols="80" value="{{html $e}}"/>
+					<input type="button" value="Add a Dependency" class="add" onclick="AddDependencyFields($(this))" />{{range .Dependencies}}
+					<div class="fieldwrapper">
+						<input type="text" class="field" name="Dependencies" cols="80" value="{{html .}}"/>
 						<input type="button" class="remove" value="-" onclick="$(this).parent().remove()"/>
 					</div>{{end}}
 				</fieldset>
-				<fieldset id="DataFields">
+				<fieldset>
 					<legend>Data</legend>
 					<textarea name="Data" rows="20" cols="80">{{html .Data}}</textarea>
 				</fieldset>

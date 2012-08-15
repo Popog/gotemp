@@ -9,9 +9,10 @@ import (
 	"time"
 )
 
-var pretty_html_template = template.Must(template.New("Pretty").Parse(
-	`<html>
+var pretty_html_template = template.Must(template.New("Pretty").Parse(`<!DOCTYPE HTML>
+<html>
 	<head>
+		<meta charset="UTF-8">
 		<title>{{.Title}}</title>
 		<script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>{{range .Scripts}}
 		{{.}}{{end}}
@@ -59,7 +60,7 @@ func (ctl contextTemplateLoader) LoadTemplate(name string) (t Template, err erro
 	// if the oldest item in the cache is too young, 
 	if stats, stats_err := memcache.Stats(c); err != nil {
 		log.Println(stats_err)
-	} else if stats.Bytes < max_cache_size || stats.Oldest > min_cache_time {
+	} else if stats == nil || stats.Bytes < max_cache_size || stats.Oldest > min_cache_time {
 		// cache the value from the datastore if we're under the max size or the oldest item is over the min time
 		set_err := memcache.Gob.Set(c, &memcache.Item{Key: name, Object: &t, Expiration: 1 * time.Hour})
 		log.Println(set_err)
@@ -74,8 +75,7 @@ type fieldAdderScriptData struct {
 
 const field_adder_script = `<script type="text/javascript">
 function AddRemoveableField(parent, fields) {
-	var intId = parent.children(".fieldwrapper").length;
-	var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\"/>");
+	var fieldWrapper = $("<div class=\"fieldwrapper\" />");
 	for(i in fields) {
 		fieldWrapper.append($(fields[i]));
 	}

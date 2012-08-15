@@ -47,7 +47,7 @@ func init() {
 	{
 		buf := bytes.NewBuffer(nil)
 		const form_body = `<form action="/select" method="post">
-			<fieldset id="Template Select">
+			<fieldset>
 				<legend>Select A Template</legend>
 				<select name="Name" class="field">{{range .}}
 					<option value="{{html .StringID}}">{{html .StringID}}</option>{{end}}
@@ -102,13 +102,13 @@ func init() {
 	{
 		buf := bytes.NewBuffer(nil)
 		form_body := `<form action="/expand/{{.Name}}" method="get">
-			<fieldset id="Description">
+			<fieldset>
 				<legend>Description</legend>
 				<p>{{.Description}}</p>
 			</fieldset>{{range .Inputs}}
-			<fieldset id="{{.}}">
+			<fieldset>
 				<legend>{{.}}</legend>
-				<input type="button" value="+{{.}}" class="add" id="add" onclick="AddRemoveableFieldHelper($(this), '{{js .}}')" />
+				<input type="button" value="+{{.}}" class="add" onclick="AddRemoveableFieldHelper($(this), '{{js .}}')" />
 			</fieldset>{{end}}
 			<div>
 				<button type="submit">Expand</button>
