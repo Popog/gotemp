@@ -3,10 +3,8 @@ package gotemp
 import (
 	"appengine"
 	"appengine/datastore"
-	"appengine/memcache"
 	"appengine/user"
 	"bytes"
-	"log"
 	"net/http"
 	"text/template"
 )
@@ -275,6 +273,7 @@ func modifyEditHandler(w http.ResponseWriter, r *http.Request) {
 
 func postEditHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	ctl := contextTemplateLoader{c}
 
 	if !forceAdmin(c, w, r) {
 		return
@@ -296,23 +295,12 @@ func postEditHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, err := template.New(Name).Funcs(builtins).Parse(Data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	template := Template{
 		Name: Name, Data: Data, Description: Description,
 		Inputs: Inputs, InputDependencies: InputDependencies, Dependencies: Dependencies,
 	}
 
-	if _, err := datastore.Put(c, datastore.NewKey(c, "Name", template.Name, 0, nil), &template); err != nil {
+	if err := ctl.SaveTemplate(template); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
 	}
-
-	if err := memcache.Delete(c, template.Name); err != memcache.ErrCacheMiss {
-		log.Println(err)
-	}
-
 }
