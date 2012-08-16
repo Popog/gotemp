@@ -1,6 +1,7 @@
 Name: `header`,
 Description: `A simple header for creating proper .go files.`,
 Inputs: { `header.Package`, `header.Imports` },
+InputDependencies: {},
 Depedencies: {},
 Data: `{{define "header"}}{{/*
 

@@ -1,8 +1,8 @@
 Name: `heap`,
 Description: ``,
 Inputs: { `heap.Type`, `heap.SliceTypeName`, `heap.SortDefined`, `sort.SliceDefined`, `sort.Compare` },
-Depedencies: { `sort`, `header` },
 InputDependencies: { `header` },
+Depedencies: { `sort`, `header` },
 Data: `{{define "heap"}}{{/*
 
 Get and check parameters
